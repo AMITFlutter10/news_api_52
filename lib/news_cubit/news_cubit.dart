@@ -10,6 +10,7 @@ import 'package:news_api_52/view/screen/business_page.dart';
 import 'package:news_api_52/view/screen/sport_page.dart';
 
 import '../const.dart';
+import '../model/articles_model.dart';
 import '../view/screen/health_page.dart';
 
 class NewsCubit extends Cubit<NewsState>{
@@ -19,9 +20,9 @@ class NewsCubit extends Cubit<NewsState>{
 
 //https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=935fd7ff5d5d47b9b01be1f7c0b9ba00
 
-  List businessList =[];
-  List sportList =[];
-List healthList=[];
+  List<Articles> businessList =[];
+  List <Articles> sportList =[];
+ List <Articles>healthList=[];
 
   List<String>title =[
     'Business',
@@ -40,6 +41,7 @@ List healthList=[];
     HealthPage(),
   ];
 
+  ArticlesModel articlesModel= ArticlesModel();
 Future<void> getBusiness()async{
   emit(LoadingBusinessDataState());
    DioHelper.getData(url: endPoint,
@@ -48,8 +50,11 @@ Future<void> getBusiness()async{
     'category':'business',
     'apiKey':'935fd7ff5d5d47b9b01be1f7c0b9ba00'
   }).then((value){
-     businessList = value.data['articles'];
-     print(businessList);
+     // businessList = value.data['articles'];
+     // print(businessList);
+     articlesModel = ArticlesModel.fromJson(value.data);
+     businessList= articlesModel.articles!;
+     print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy$businessList");
    emit(GetBusinessDataState());
    }).catchError((error){
      print(error);
@@ -64,8 +69,10 @@ Future<void> getSport()async{
     'category':'sport',
     'apiKey':'935fd7ff5d5d47b9b01be1f7c0b9ba00'
   }).then((value){
-     sportList = value.data['articles'];
-     print(sportList);
+     // sportList = value.data['articles'];
+     // print(sportList);
+     articlesModel = ArticlesModel.fromJson(value.data);
+     sportList= articlesModel.articles!;
    emit(GetSportDataState());
    }).catchError((error){
      print(error);
@@ -82,8 +89,10 @@ Future<void> getHealth()async{
     'category':'health',
     'apiKey':'935fd7ff5d5d47b9b01be1f7c0b9ba00'
   }).then((value){
-     healthList = value.data['articles'];
-     print(healthList);
+     // healthList = value.data['articles'];
+     // print(healthList);
+     articlesModel = ArticlesModel.fromJson(value.data);
+     healthList= articlesModel.articles!;
    emit(GetHealthDataState());
    }).catchError((error){
      print(error);
